@@ -21,7 +21,4 @@ new SitePreviewStack(app, stackName, {
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
-new DeploymentStack(app, "ProductionWebsite", {env: { 
-  account: process.env.CDK_DEFAULT_ACCOUNT, 
-  region: process.env.CDK_DEFAULT_REGION 
-}})
+new DeploymentStack(app, "ProductionWebsite", {})
