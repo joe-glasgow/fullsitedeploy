@@ -55,7 +55,7 @@ jobs:
         id: cdk_synth
         run: |
           cd infrastructure
-          npm run synth:deploy
+          npm run synth:production
 
       - name: deploy the stack on AWS
         id: cdk_deploy
