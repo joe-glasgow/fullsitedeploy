@@ -1,18 +1,18 @@
 {
-  "name": "sitelauncher",
+  "name": "sitepreview",
   "version": "0.1.0",
   "bin": {
-    "sitelauncher": "bin/sitelauncher.js"
+    "sitepreview": "bin/sitepreview.js"
   },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "synth": "cdk synth \"SiteLauncherStack-${STAGE}\" --require-approval never --outputs-file cdk.out.json",
-    "deploy": "cdk deploy \"SiteLauncherStack-${STAGE}\" --require-approval never --outputs-file cdk.out.json",
-    "postdeploy": "node --eval \"console.log('::set-output name=env_url::' + require('./cdk.out.json')['SiteLauncherStack-${STAGE}'].DeploymentUrl)\"",
-    "destroy": "cdk destroy \"SiteLauncherStack-${STAGE}\" --force"
+    "synth": "cdk synth \"SitePreviewStack-${STAGE}\" --require-approval never --outputs-file cdk.out.json",
+    "deploy": "cdk deploy \"SitePreviewStack-${STAGE}\" --require-approval never --outputs-file cdk.out.json",
+    "postdeploy": "node --eval \"console.log('::set-output name=env_url::' + require('./cdk.out.json')['SitePreviewStack-${STAGE}'].DeploymentUrl)\"",
+    "destroy": "cdk destroy \"SitePreviewStack-${STAGE}\" --force"
   },
   "devDependencies": {
     "@tsconfig/node18": "^1.0.1",

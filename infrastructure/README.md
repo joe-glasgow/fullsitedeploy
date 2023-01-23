@@ -1,4 +1,4 @@
-# SiteLauncher
+# Site Preview
 
 Uses Github Actions to deploy a preview environment of a static website to AWS.
 Heavily borrowed from Julien Goux and his amazing example: https://github.com/jgoux/preview-environments-per-pull-request-using-aws-cdk-and-github-actions#cdk
@@ -8,7 +8,7 @@ Heavily borrowed from Julien Goux and his amazing example: https://github.com/jg
 
 The `website` folder contains an example of a static `index.html` folder to serve up content
 
-Within `lib`, the `sitelauncher-stack` creates a new Cloudfront distribution which points to an s3 butcket serving our static `website` folder.
+Within `lib`, the `sitepreview-stack` creates a new Cloudfront distribution which points to an s3 butcket serving our static `website` folder.
 
 ## How it works
 

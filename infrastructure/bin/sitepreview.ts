@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import SiteLauncherStack from '../lib/sitelauncher-stack';
+import SitePreviewStack from '../lib/sitepreview-stack';
 
 const app = new cdk.App();
-const stackName = 'SiteLauncherStack-' + process.env.STAGE;
-new SiteLauncherStack(app, stackName, {
+const stackName = 'SitePreviewStack-' + process.env.STAGE;
+new SitePreviewStack(app, stackName, {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
