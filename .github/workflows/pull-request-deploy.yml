@@ -55,12 +55,18 @@ jobs:
 
       - name: run synth
         id: cdk_synth
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_DEFAULT_ACCOUNT }}
+          CDK_DEFAULT_REGION:  ${{ env.AWS_DEFAULT_REGION}}
         run: |
           cd infrastructure
           npm run synth:preview
 
       - name: deploy the stack on AWS
         id: cdk_deploy
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_DEFAULT_ACCOUNT }}
+          CDK_DEFAULT_REGION:  ${{ env.AWS_DEFAULT_REGION}}
         run: |
           cd infrastructure
           npm run deploy:preview
