@@ -44,6 +44,9 @@ jobs:
           aws-region: ${{env.AWS_DEFAULT_REGION}}
 
       - name: destroy the stack on AWS
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_DEFAULT_ACCOUNT }}
+          CDK_DEFAULT_REGION:  ${{ env.AWS_DEFAULT_REGION}}
         run: |
           cd infrastructure
           npm run destroy:preview
