@@ -9,10 +9,9 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "synth": "cdk synth \"SitePreviewStack-${STAGE}\" --require-approval never --outputs-file cdk.out.json",
-    "deploy": "cdk deploy \"SitePreviewStack-${STAGE}\" --require-approval never --outputs-file cdk.out.json",
-    "postdeploy": "node --eval \"console.log('::set-output name=env_url::' + require('./cdk.out.json')['SitePreviewStack-${STAGE}'].DeploymentUrl)\"",
-    "destroy": "cdk destroy \"SitePreviewStack-${STAGE}\" --force"
+    "synth:preview": "cdk synth \"SitePreviewStack-${STAGE}\" --require-approval never --outputs-file cdk.out.json",
+    "deploy:preview": "cdk deploy \"SitePreviewStack-${STAGE}\" --require-approval never --outputs-file cdk.out.json && node --eval \"console.log('::set-output name=env_url::' + require('./cdk.out.json')['SitePreviewStack-${STAGE}'].DeploymentUrl)\"",
+    "destroy:preview": "cdk destroy \"SitePreviewStack-${STAGE}\" --force"
   },
   "devDependencies": {
     "@tsconfig/node18": "^1.0.1",
