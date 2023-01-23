@@ -1,0 +1,75 @@
+on:
+  pull_request:
+    branches: 
+      - main
+    types: [closed]
+
+permissions:
+ id-token: write
+ contents: write
+ pull-requests: write 
+ deployments: write
+
+jobs:
+  deploy_to_production:
+    concurrency: deploy-pr-app-${{ github.head_ref }}
+    env:
+      AWS_DEFAULT_REGION: eu-west-1
+    if: ${{ github.event.pull_request.merged }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: set STAGE variable in environment for next steps
+        run: echo "STAGE=deploy-to-production" >> $GITHUB_ENV
+
+      - name: create a github deployment
+        uses: bobheadxi/deployments@v1
+        id: deployment
+        with:
+          debug: true
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: ${{ env.STAGE }}
+          ref: ${{ github.head_ref }}
+          override: false
+
+      - name: checkout the files
+        uses: actions/checkout@v2
+
+      - name: install node dependencies
+        id: node_install
+        run:  |
+          cd infrastructure
+          npm install
+
+      - name: configureawscredentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: githubrolesession
+          aws-region: ${{env.AWS_DEFAULT_REGION}}
+
+      - name: run synth
+        id: cdk_synth
+        run: |
+          cd infrastructure
+          npm run synth:deploy
+
+      - name: deploy the stack on AWS
+        id: cdk_deploy
+        run: |
+          cd infrastructure
+          npm run deploy:production
+ 
+
+      - name: update the github deployment status
+        uses: bobheadxi/deployments@v0.5.2
+        if: always()
+        with:
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          env_url: ${{ steps.cdk_deploy.outputs.env_url }}

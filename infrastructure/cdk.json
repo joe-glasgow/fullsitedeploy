@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/sitepreview.ts",
+  "app": "npx ts-node --prefer-ts-exts bin/sitestacks.ts",
   "watch": {
     "include": [
       "**"

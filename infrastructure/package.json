@@ -9,26 +9,24 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
+    "synth:production": "cdk synth \"ProductionWebsite\" --require-approval never --outputs-file cdk.out.json --profile web-developer",
     "synth:preview": "cdk synth \"SitePreviewStack-${STAGE}\" --require-approval never --outputs-file cdk.out.json",
+    "deploy:production": "cdk deploy \"ProductionWebsite\" --require-approval never --outputs-file cdk.out.json",
     "deploy:preview": "cdk deploy \"SitePreviewStack-${STAGE}\" --require-approval never --outputs-file cdk.out.json && node --eval \"console.log('::set-output name=env_url::' + require('./cdk.out.json')['SitePreviewStack-${STAGE}'].DeploymentUrl)\"",
     "destroy:preview": "cdk destroy \"SitePreviewStack-${STAGE}\" --force"
   },
   "devDependencies": {
+    "@aws-cdk/core": "^1.189.0",
     "@tsconfig/node18": "^1.0.1",
     "@types/jest": "^29.2.5",
     "@types/node": "18.11.18",
     "aws-cdk": "^2.61.1",
+    "aws-cdk-lib": "^2.61.1",
+    "constructs": "^10.1.228",
     "jest": "^29.3.1",
+    "source-map-support": "^0.5.21",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
-    "typescript": "~4.9.4",
-    "@aws-cdk/aws-cloudfront": "^1.189.0",
-    "@aws-cdk/aws-cloudfront-origins": "^1.189.0",
-    "@aws-cdk/aws-s3": "^1.189.0",
-    "@aws-cdk/aws-s3-deployment": "^1.189.0",
-    "@aws-cdk/core": "^1.189.0",
-    "aws-cdk-lib": "2.61.1",
-    "constructs": "^10.0.0",
-    "source-map-support": "^0.5.21"
+    "typescript": "~4.9.4"
   }
 }

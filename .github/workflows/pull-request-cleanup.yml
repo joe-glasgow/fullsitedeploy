@@ -32,7 +32,9 @@ jobs:
       # there is a bug with the actions/cache used in bahmutov/npm-install@v1 on "closed" event
       # more infos here : https://github.com/actions/cache/issues/478
       - name: install node dependencies
-        run: npm ci
+        run: |
+          cd infrastructure
+          npm ci
 
       - name: configureawscredentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -42,7 +44,9 @@ jobs:
           aws-region: ${{env.AWS_DEFAULT_REGION}}
 
       - name: destroy the stack on AWS
-        run: npm run destroy:preview
+        run: |
+          cd infrastructure
+          npm run destroy:preview
 
       - name: delete the github deployments and the corresponding environment
         uses: strumwolf/delete-deployment-environment@v1.1.0
