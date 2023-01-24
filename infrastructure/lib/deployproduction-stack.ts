@@ -13,6 +13,8 @@ import S3Bucket from "./s3/bucket";
 export default class DeploymentStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
+    // replace this with your own domain name
+    // TODO: replace with env variable
     const domainName = 'joemorrison.co.uk';
     // We retrieve the HostedZone associated with our domain by finding it via the domain name
     const hostedZone = aws_route53.HostedZone.fromLookup(this, 'website-hosted-zone', { domainName });
