@@ -57,6 +57,12 @@ export default class DeploymentStack extends Stack {
         target: aws_route53.RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
         ttl: Duration.minutes(1),
     });
+    new aws_route53.ARecord(this, 'www-arecord', {
+      zone: hostedZone,
+      recordName: "www",
+      target: aws_route53.RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
+      ttl: Duration.minutes(1),
+    });
     /**
     * Output the distribution's url so we can pass it to external systems
     */
