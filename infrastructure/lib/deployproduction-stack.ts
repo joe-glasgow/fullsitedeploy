@@ -21,7 +21,8 @@ export default class DeploymentStack extends Stack {
     const certificate = new aws_certificatemanager.DnsValidatedCertificate(this, 'website-certificate', {
         domainName,
         hostedZone,
-        region: 'us-east-1'
+        region: 'us-east-1',
+        subjectAlternativeNames: ["*." + domainName],
     });
     /**
      * The S3 Bucket hosting our build
@@ -32,7 +33,7 @@ export default class DeploymentStack extends Stack {
      * The CloudFront distribution caching and proxying our requests to our bucket
      */
     const distribution = CfBucketDistribution(this, "distribution", {
-        domainNames: [domainName],
+        domainNames: [domainName, `www.${domainName}`],
         certificate: certificate,
         defaultBehavior: {
         origin: new S3Origin(bucket),
@@ -58,11 +59,6 @@ export default class DeploymentStack extends Stack {
         ttl: Duration.minutes(1),
     });
 
-    new aws_route53_patterns.HttpsRedirect(this, 'redirect', {
-      recordNames: [domainName],
-      targetDomain: `www.${domainName}`,
-      zone: hostedZone
-    });
     /**
     * Output the distribution's url so we can pass it to external systems
     */
