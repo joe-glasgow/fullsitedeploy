@@ -9,7 +9,7 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "synth:production": "cdk synth \"ProductionWebsite\" --require-approval never --outputs-file cdk.out.json --profile web-developer",
+    "synth:production": "cdk synth \"ProductionWebsite\" --require-approval never --outputs-file cdk.out.json",
     "synth:preview": "cdk synth \"SitePreviewStack-${STAGE}\" --require-approval never --outputs-file cdk.out.json",
     "deploy:production": "cdk deploy \"ProductionWebsite\" --require-approval never --outputs-file cdk.out.json",
     "deploy:preview": "cdk deploy \"SitePreviewStack-${STAGE}\" --require-approval never --outputs-file cdk.out.json && node --eval \"console.log('::set-output name=env_url::' + require('./cdk.out.json')['SitePreviewStack-${STAGE}'].DeploymentUrl)\"",
