@@ -27,7 +27,7 @@ export default class DeploymentStack extends Stack {
     /**
      * The S3 Bucket hosting our build
      */
-    const bucket = S3Bucket(this, "bucket", { websiteRedirect: });
+    const bucket = S3Bucket(this, "bucket", {});
 
     /**
      * The CloudFront distribution caching and proxying our requests to our bucket
