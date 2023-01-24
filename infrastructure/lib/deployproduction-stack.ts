@@ -1,4 +1,4 @@
-import { aws_certificatemanager, aws_route53, CfnOutput, Duration, Stack, StackProps } from "aws-cdk-lib";
+import { aws_certificatemanager, aws_route53, aws_route53_patterns, CfnOutput, Duration, Stack, StackProps } from "aws-cdk-lib";
 import { CachePolicy } from "aws-cdk-lib/aws-cloudfront";
 import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
@@ -32,7 +32,7 @@ export default class DeploymentStack extends Stack {
      * The CloudFront distribution caching and proxying our requests to our bucket
      */
     const distribution = CfBucketDistribution(this, "distribution", {
-        domainNames: [domainName, `www.${domainName}`],
+        domainNames: [domainName],
         certificate: certificate,
         defaultBehavior: {
         origin: new S3Origin(bucket),
@@ -56,6 +56,12 @@ export default class DeploymentStack extends Stack {
         zone: hostedZone,
         target: aws_route53.RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
         ttl: Duration.minutes(1),
+    });
+
+    new aws_route53_patterns.HttpsRedirect(this, 'redirect', {
+      recordNames: [domainName],
+      targetDomain: `www.${domainName}`,
+      zone: hostedZone
     });
     /**
     * Output the distribution's url so we can pass it to external systems
