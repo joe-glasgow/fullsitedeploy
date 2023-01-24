@@ -1,3 +1,5 @@
+name: "Deploy to production"
+
 on:
   pull_request:
     branches: 
@@ -69,7 +71,6 @@ jobs:
           cd infrastructure
           npm run deploy:production
  
-
       - name: update the github deployment status
         uses: bobheadxi/deployments@v0.5.2
         if: always()
@@ -79,3 +80,10 @@ jobs:
           status: ${{ job.status }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           env_url: ${{ steps.cdk_deploy.outputs.env_url }}
+
+      - name: Delete merged branches
+        uses: koj-co/delete-merged-action@master
+        with:
+          branches: "!main, !production, *"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
