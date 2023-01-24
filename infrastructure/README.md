@@ -1,4 +1,16 @@
-# Site Preview
+# Fullsite Deploy Infrastructure
+
+This repo contains two stacks: a deployment stack and preview stack.
+The idea is that any PRs tagged with ` :rocket: deploy` will deploy a preview environment. Whilst all merges to `main` will kick off a production deployment and branch tidy up.
+
+## Production Deployment
+
+This assumes a ["trunk"](https://www.splunk.com/en_us/blog/learn/trunk-based-development-vs-gitflow.html) based branching strategy.
+
+The `deploy-production` workflow uses Github OICD integration with AWS to synth and deploy the CDK stack to production. In this case the stack is a simple s3 bucket containing the `website` folder from root directory.
+
+The deployment includes a Route53 domain and a Cloudfront Distribution specifing the bucket as its origin. 
+## Site Preview
 
 Uses Github Actions to deploy a preview environment of a static website to AWS.
 Heavily borrowed from Julien Goux and his amazing example: https://github.com/jgoux/preview-environments-per-pull-request-using-aws-cdk-and-github-actions#cdk
