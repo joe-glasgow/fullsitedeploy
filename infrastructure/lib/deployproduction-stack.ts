@@ -32,7 +32,7 @@ export default class DeploymentStack extends Stack {
      * The CloudFront distribution caching and proxying our requests to our bucket
      */
     const distribution = CfBucketDistribution(this, "distribution", {
-        domainNames: [domainName],
+        domainNames: [domainName, `www.${domainName}`],
         certificate: certificate,
         defaultBehavior: {
         origin: new S3Origin(bucket),
@@ -56,12 +56,6 @@ export default class DeploymentStack extends Stack {
         zone: hostedZone,
         target: aws_route53.RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
         ttl: Duration.minutes(1),
-    });
-    new aws_route53.ARecord(this, 'www-arecord', {
-      zone: hostedZone,
-      recordName: "www",
-      target: aws_route53.RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
-      ttl: Duration.minutes(1),
     });
     /**
     * Output the distribution's url so we can pass it to external systems
