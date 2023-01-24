@@ -9,3 +9,5 @@ Requires [Github OICD](https://www.eliasbrange.dev/posts/secure-aws-deploys-from
 This sample application deploys a static s3 website, with a hosted domain from Route53 in front of a Cloudfront Distribution. 
 
 This examples uses CDK in Typescript flavour.
+
+Locally assumes CDK v2.61.1 and Node v18 (LTS)
