@@ -60,8 +60,9 @@ export default class DeploymentStack extends Stack {
     new HttpsRedirect(this, 'wwwToNonWww', {
       recordNames: [`www.${domainName}`],
       targetDomain: domainName,
-      zone: hostedZone
-    })
+      zone: hostedZone,
+      certificate: certificate
+    });
 
     // And lastly we need to tell Amazon Route 53 to forward traffic to the Amazon CloudFront distribution
     new aws_route53.ARecord(this, 'website-arecord', {
