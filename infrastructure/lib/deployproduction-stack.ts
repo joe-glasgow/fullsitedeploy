@@ -1,5 +1,5 @@
 import { aws_certificatemanager, aws_route53, aws_route53_patterns, CfnOutput, Duration, Stack, StackProps } from "aws-cdk-lib";
-import { CachePolicy } from "aws-cdk-lib/aws-cloudfront";
+import { CachePolicy, ViewerProtocolPolicy } from "aws-cdk-lib/aws-cloudfront";
 import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
@@ -38,6 +38,7 @@ export default class DeploymentStack extends Stack {
         domainNames: [domainName],
         certificate: certificate,
         defaultBehavior: {
+        viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         origin: new S3Origin(bucket),
         cachePolicy: new CachePolicy(this, 'website-caching', {
             defaultTtl: Duration.minutes(1)
@@ -59,12 +60,6 @@ export default class DeploymentStack extends Stack {
         zone: hostedZone,
         target: aws_route53.RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
         ttl: Duration.minutes(1),
-    });
-
-    new aws_route53_patterns.HttpsRedirect(this, 'Redirect', {
-      recordNames: [`www.${domainName}`],
-      targetDomain: domainName,
-      zone: hostedZone,
     });
 
     /**
