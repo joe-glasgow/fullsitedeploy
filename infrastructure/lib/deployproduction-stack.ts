@@ -1,6 +1,7 @@
 import { aws_certificatemanager, aws_route53, aws_route53_patterns, CfnOutput, Duration, Stack, StackProps } from "aws-cdk-lib";
 import { CachePolicy, ViewerProtocolPolicy } from "aws-cdk-lib/aws-cloudfront";
 import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
+import { HttpsRedirect } from "aws-cdk-lib/aws-route53-patterns";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
@@ -55,6 +56,13 @@ export default class DeploymentStack extends Stack {
       distributionPaths: ["/", "/index.html"],
       sources: [Source.asset('../website')],
     });
+
+    new HttpsRedirect(this, 'wwwToNonWww', {
+      recordNames: [`www.${domainName}`],
+      targetDomain: domainName,
+      zone: hostedZone
+    })
+
     // And lastly we need to tell Amazon Route 53 to forward traffic to the Amazon CloudFront distribution
     new aws_route53.ARecord(this, 'website-arecord', {
         zone: hostedZone,
