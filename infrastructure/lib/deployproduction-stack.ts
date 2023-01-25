@@ -1,8 +1,8 @@
 import { aws_certificatemanager, aws_route53, aws_route53_patterns, CfnOutput, Duration, Stack, StackProps } from "aws-cdk-lib";
 import { CachePolicy, ViewerProtocolPolicy } from "aws-cdk-lib/aws-cloudfront";
 import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
-import { HttpsRedirect } from "aws-cdk-lib/aws-route53-patterns";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
+import { RedirectProtocol } from "aws-cdk-lib/aws-s3";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
 import CfBucketDistribution from "./cloudfront/distribution";
@@ -30,8 +30,10 @@ export default class DeploymentStack extends Stack {
     /**
      * The S3 Bucket hosting our build
      */
-    const bucket = S3Bucket(this, "bucket", {});
-
+    const bucket = S3Bucket(this, domainName, {});
+    const wwwBucket = S3Bucket(this, `www.${domainName}`, {
+      websiteRedirect: { hostName: domainName, protocol: RedirectProtocol.HTTP }
+    });
     /**
      * The CloudFront distribution caching and proxying our requests to our bucket
      */
@@ -47,6 +49,7 @@ export default class DeploymentStack extends Stack {
          },
         defaultRootObject: "index.html",
     });
+
     /**
      * Upload our build to the bucket and invalidate the distribution's cache
      */
@@ -55,13 +58,6 @@ export default class DeploymentStack extends Stack {
       distribution,
       distributionPaths: ["/", "/index.html"],
       sources: [Source.asset('../website')],
-    });
-
-    new HttpsRedirect(this, 'wwwToNonWww', {
-      recordNames: [`www.${domainName}`],
-      targetDomain: domainName,
-      zone: hostedZone,
-      certificate: certificate
     });
 
     // And lastly we need to tell Amazon Route 53 to forward traffic to the Amazon CloudFront distribution
@@ -82,5 +78,7 @@ export default class DeploymentStack extends Stack {
         description: 'The URL of your website',
         exportName: 'websiteUrl',
     });
+
+    new CfnOutput(this, "wwwBucket", { value: wwwBucket.bucketArn })
   }
 }
