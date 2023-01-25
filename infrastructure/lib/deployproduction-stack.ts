@@ -1,9 +1,8 @@
 import { aws_certificatemanager, aws_route53, aws_route53_patterns, CfnOutput, Duration, Stack, StackProps } from "aws-cdk-lib";
 import { CachePolicy, ViewerProtocolPolicy } from "aws-cdk-lib/aws-cloudfront";
 import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
-import { HttpsRedirect } from "aws-cdk-lib/aws-route53-patterns";
 import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
-import { HttpMethods, RedirectProtocol } from "aws-cdk-lib/aws-s3";
+import { RedirectProtocol } from "aws-cdk-lib/aws-s3";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
 import CfBucketDistribution from "./cloudfront/distribution";
@@ -79,7 +78,7 @@ export default class DeploymentStack extends Stack {
         description: 'The URL of your website',
         exportName: 'websiteUrl',
     });
-    
+
     new CfnOutput(this, "wwwBucket", { value: wwwBucket.bucketArn })
   }
 }
