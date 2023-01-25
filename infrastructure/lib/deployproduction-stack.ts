@@ -61,6 +61,12 @@ export default class DeploymentStack extends Stack {
         ttl: Duration.minutes(1),
     });
 
+    new aws_route53_patterns.HttpsRedirect(this, 'Redirect', {
+      recordNames: [`www.${domainName}`],
+      targetDomain: domainName,
+      zone: hostedZone,
+    });
+
     /**
     * Output the distribution's url so we can pass it to external systems
     */
