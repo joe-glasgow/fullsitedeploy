@@ -35,7 +35,7 @@ export default class DeploymentStack extends Stack {
      * The CloudFront distribution caching and proxying our requests to our bucket
      */
     const distribution = CfBucketDistribution(this, "distribution", {
-        domainNames: [domainName, `www.${domainName}`],
+        domainNames: [domainName],
         certificate: certificate,
         defaultBehavior: {
         origin: new S3Origin(bucket),
